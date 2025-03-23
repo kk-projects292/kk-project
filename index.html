@@ -3,63 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Generator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <title>Document</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        img{
+            border-radius: 50%;
+        }
+        #container{
+            width: 40%;
+            margin: 0px auto;
             text-align: center;
-            margin: 50px;
-        }
-        h2{
-            margin-top: 100px;
-        }
-        input {
-            padding: 8px;
-            width: 80%;
-            max-width: 300px;
-            margin-bottom: 10px;
-        }
-        button {
-            padding: 10px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        #qrcode {
-            width: 200px;
-            margin: 30px auto;
+            box-shadow: 0px 2px 10px 0px black;
+            height: 60vh;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-
-    <h2>QR Code Generator</h2>
-    <input type="text" id="qrText" placeholder="Enter text or URL">
-    <button onclick="generateQR()">Generate QR Code</button>
-    <div id="qrcode"></div>
-
+    <div id="container">
+        <h1>Random user generator</h1>
+        <button onclick="fetchData()">Get User</button><br><br>
+        <div id="user"></div>
+        
+    </div>
     <script>
-        function generateQR() {
-            let qrText = document.getElementById("qrText").value;
-            let qrCodeDiv = document.getElementById("qrcode");
-
-            // Clear previous QR code
-            qrCodeDiv.innerHTML = "";
-
-            if (qrText.trim() !== "") {
-                new QRCode(qrCodeDiv, {
-                    text: qrText,
-                    width: 200,
-                    height: 200
-                });
-            } else {
-                alert("Please enter text or a URL!");
+        let userContainer=document.getElementById('user');
+        async function fetchData() {
+            try{
+                let response = await fetch('https://randomuser.me/api/');
+                let data = await response.json();
+                let userData=data.results[0];
+                let name = `${userData.name.title} ${userData.name.first} ${userData.name.last}`;
+                let image = userData.picture.large;
+                userContainer.innerHTML=`<img src="${image}"> <h1>${name}</h1> `;
+            }
+            catch(err){
+                console.log(err);
             }
         }
     </script>
-
 </body>
 </html>
